@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class recordsManager {
@@ -33,20 +34,31 @@ public class recordsManager {
 	public class Person {
 		private String myName;
 		private int myPoints;
+		private String myTeam;
 		private ArrayList<Event> myEvents;
 		
-		public Person(String name) {
+		public Person(String name, String team) {
 			myName = name;
 			myPoints = 0;
+			myTeam = team;
 			myEvents = new ArrayList<Event>();
 			members.put(myName, this);
-			System.out.println("Added new member: " + myName + "!");
+			System.out.println("Added new member: " + myName + "to Team " + myTeam + "!");
 		}
 		
 		public void addEventAttendance(Event e) {
 			myEvents.add(e);
-			// THIS CHECK NEEDS TO BE FIXED
-			if ((! e.myType.equals("Other Social")) && (! e.myType.equals("General Meeting"))) {
+			// If this is an other team social or general meeting
+			boolean other = true; 
+			boolean gen = false;
+			String[] splitted = e.myName.split("\\s+");
+			if (Arrays.asList(splitted).contains(myTeam)) {
+				other = false;
+			}
+			if (Arrays.asList(splitted).contains("Gen")) {
+				gen = true;
+			}
+			if (other || gen) {
 				this.myPoints++;
 			}
 			this.myPoints++;
